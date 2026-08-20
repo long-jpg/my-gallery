@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "title": "山间晨雾",
+    "subtitle": "云南·香格里拉",
+    "image": "https://picsum.photos/seed/mountain1/1200/800.jpg",
+    "thumb": "https://picsum.photos/seed/mountain1/400/300.jpg",
+    "description": "清晨的阳光穿透薄雾，洒在连绵起伏的山峦上。这里是海拔3200米的高原，空气稀薄但景色绝美。",
+    "date": "2025-06-15",
+    "tags": ["风景", "高原", "日出"],
+    "location": "云南省迪庆藏族自治州"
+  },
+  {
+    "id": 2,
+    "title": "古镇黄昏",
+    "subtitle": "浙江·乌镇",
+    "image": "https://picsum.photos/seed/town2/1200/800.jpg",
+    "thumb": "https://picsum.photos/seed/town2/400/300.jpg",
+    "description": "夕阳西下，乌镇的石板路被染成金色。小桥流水人家，这里保留着最原汁原味的江南水乡风貌。",
+    "date": "2025-05-20",
+    "tags": ["人文", "古镇", "江南"],
+    "location": "浙江省嘉兴市桐乡市"
+  },
+  {
+    "id": 3,
+    "title": "海岸线",
+    "subtitle": "福建·平潭",
+    "image": "https://picsum.photos/seed/sea3/1200/800.jpg",
+    "thumb": "https://picsum.photos/seed/sea3/400/300.jpg",
+    "description": "蔚蓝的大海与天空相接，海浪拍打着礁石。平潭岛是中国第五大岛，也是距离台湾最近的地方。",
+    "date": "2025-07-08",
+    "tags": ["海景", "岛屿", "夏日"],
+    "location": "福建省福州市平潭县"
+  },
+  {
+    "id": 4,
+    "title": "秋日森林",
+    "subtitle": "四川·九寨沟",
+    "image": "https://picsum.photos/seed/forest4/1200/800.jpg",
+    "thumb": "https://picsum.photos/seed/forest4/400/300.jpg",
+    "description": "深秋的九寨沟层林尽染，五彩斑斓的树叶倒映在清澈的湖水中，宛如童话世界。",
+    "date": "2024-10-12",
+    "tags": ["秋景", "森林", "湖泊"],
+    "location": "四川省阿坝藏族羌族自治州"
+  },
+  {
+    "id": 5,
+    "title": "城市夜景",
+    "subtitle": "上海·外滩",
+    "image": "https://picsum.photos/seed/city5/1200/800.jpg",
+    "thumb": "https://picsum.photos/seed/city5/400/300.jpg",
+    "description": "华灯初上，外滩的万国建筑群在灯光的映衬下熠熠生辉，对岸陆家嘴的摩天大楼直插云霄。",
+    "date": "2025-08-01",
+    "tags": ["城市", "夜景", "建筑"],
+    "location": "上海市黄浦区中山东一路"
+  }
+]

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的相册 - Gitee Gallery</title>
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper@11/swiper-bundle.min.css">
+  <!-- PhotoSwipe CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/photoswipe@5/dist/photoswipe.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 0 30px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+    header p {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    /* ===== 轮播区域 ===== */
+    .gallery-section {
+      margin-bottom: 30px;
+    }
+    .swiper {
+      width: 100%;
+      height: 520px;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .swiper-slide {
+      position: relative;
+      cursor: pointer;
+      background: #1a1a1a;
+    }
+    .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .swiper-slide:hover img {
+      transform: scale(1.03);
+    }
+    .slide-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 60px 30px 30px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      pointer-events: none;
+    }
+    .slide-overlay h3 {
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .slide-overlay span {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    .swiper-pagination-bullet {
+      background: rgba(255,255,255,0.4);
+      opacity: 1;
+      width: 10px;
+      height: 10px;
+    }
+    .swiper-pagination-bullet-active {
+      background: #fff;
+      width: 28px;
+      border-radius: 5px;
+    }
+    .swiper-button-next, .swiper-button-prev {
+      color: #fff;
+      background: rgba(0,0,0,0.3);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      backdrop-filter: blur(4px);
+    }
+    .swiper-button-next:after, .swiper-button-prev:after {
+      font-size: 18px;
+    }
+
+    /* ===== 详情面板 ===== */
+    .detail-panel {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 30px;
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+      transition: all 0.3s ease;
+    }
+    .detail-info {
+      flex: 1;
+    }
+    .detail-info h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .detail-info .subtitle {
+      color: #888;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+    .detail-info .desc {
+      color: #bbb;
+      line-height: 1.8;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #999;
+      font-size: 0.85rem;
+    }
+    .meta-item svg {
+      width: 16px;
+      height: 16px;
+      fill: #666;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      background: #2a2a2a;
+      color: #aaa;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      border: 1px solid #333;
+    }
+    .detail-thumb {
+      width: 200px;
+      height: 150px;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid #333;
+    }
+    .detail-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ===== 缩略图导航 ===== */
+    .thumb-nav {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .thumb-nav::-webkit-scrollbar {
+      height: 4px;
+    }
+    .thumb-nav::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 2px;
+    }
+    .thumb-item {
+      width: 100px;
+      height: 70px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.5;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumb-item.active {
+      border-color: #fff;
+      opacity: 1;
+    }
+    .thumb-item:hover {
+      opacity: 0.8;
+    }
+
+    /* ===== 提示文字 ===== */
+    .hint {
+      text-align: center;
+      color: #555;
+      font-size: 0.8rem;
+      margin-top: 16px;
+    }
+
+    /* ===== 加载动画 ===== */
+    .loading {
+      text-align: center;
+      padding: 100px 0;
+      color: #666;
+    }
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #333;
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .swiper { height: 300px; }
+      .detail-panel { flex-direction: column; }
+      .detail-thumb { width: 100%; height: 200px; }
+      header h1 { font-size: 1.6rem; }
+      .slide-overlay h3 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>我的相册</h1>
+      <p>点击图片可全屏放大查看，左右滑动切换</p>
+    </header>
+
+    <div id="loading" class="loading">
+      <div class="loading-spinner"></div>
+      <p>正在加载相册数据...</p>
+    </div>
+
+    <div id="app" style="display:none;">
+      <!-- 轮播图 -->
+      <div class="gallery-section">
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper" id="swiper-wrapper"></div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        </div>
+      </div>
+
+      <!-- 详情面板 -->
+      <div class="detail-panel" id="detail-panel">
+        <div class="detail-info" id="detail-info"></div>
+        <div class="detail-thumb" id="detail-thumb"></div>
+      </div>
+
+      <!-- 缩略图导航 -->
+      <div class="thumb-nav" id="thumb-nav"></div>
+
+      <p class="hint">💡 提示：点击轮播图可进入全屏放大模式，支持手势缩放和滑动切换</p>
+    </div>
+  </div>
+
+  <!-- PhotoSwipe 结构 -->
+  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+    <div class="pswp__scroll-wrap">
+      <div class="pswp__container">
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+        <div class="pswp__item"></div>
+      </div>
+      <div class="pswp__ui pswp__ui--hidden">
+        <div class="pswp__top-bar">
+          <div class="pswp__counter"></div>
+          <button class="pswp__button pswp__button--close" title="关闭 (Esc)"></button>
+          <button class="pswp__button pswp__button--share" title="分享"></button>
+          <button class="pswp__button pswp__button--fs" title="全屏"></button>
+          <button class="pswp__button pswp__button--zoom" title="缩放"></button>
+          <div class="pswp__preloader"><div class="pswp__preloader__icn"><div class="pswp__preloader__cut"><div class="pswp__preloader__donut"></div></div></div></div>
+        </div>
+        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class="pswp__share-tooltip"></div></div>
+        <button class="pswp__button pswp__button--arrow--left" title="上一张"></button>
+        <button class="pswp__button pswp__button--arrow--right" title="下一张"></button>
+        <div class="pswp__caption"><div class="pswp__caption__center"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper@11/swiper-bundle.min.js"></script>
+  <!-- PhotoSwipe JS -->
+  <script src="https://unpkg.com/photoswipe@5/dist/photoswipe.umd.min.js"></script>
+  <script src="https://unpkg.com/photoswipe@5/dist/photoswipe-lightbox.umd.min.js"></script>
+
+  <script>
+    let galleryData = [];
+    let swiper = null;
+    let lightbox = null;
+
+    // 图标 SVG
+    const icons = {
+      calendar: `<svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>`,
+      location: `<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+      tag: `<svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>`
+    };
+
+    // 加载 JSON 数据
+    async function loadData() {
+      try {
+        const res = await fetch('data.json');
+        galleryData = await res.json();
+        initGallery();
+      } catch (e) {
+        document.querySelector('#loading p').textContent = '加载失败，请检查 data.json 是否存在';
+        console.error(e);
+      }
+    }
+
+    // 初始化画廊
+    function initGallery() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+
+      // 1. 生成 Swiper 幻灯片
+      const wrapper = document.getElementById('swiper-wrapper');
+      galleryData.forEach((item, idx) => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        slide.innerHTML = `
+          <img src="${item.image}" alt="${item.title}" loading="lazy">
+          <div class="slide-overlay">
+            <h3>${item.title}</h3>
+            <span>${item.subtitle}</span>
+          </div>
+        `;
+        slide.addEventListener('click', () => openLightbox(idx));
+        wrapper.appendChild(slide);
+      });
+
+      // 2. 初始化 Swiper
+      swiper = new Swiper('.mySwiper', {
+        loop: true,
+        autoplay: { delay: 4000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        on: {
+          slideChange: function () {
+            updateDetail(this.realIndex);
+          }
+        }
+      });
+
+      // 3. 初始化 PhotoSwipe Lightbox
+      const pswpItems = galleryData.map(item => ({
+        src: item.image,
+        width: 1200,
+        height: 800,
+        title: `${item.title} · ${item.subtitle}`
+      }));
+
+      lightbox = new PhotoSwipeLightbox({
+        dataSource: pswpItems,
+        pswpModule: PhotoSwipe,
+        bgOpacity: 0.9,
+        padding: { top: 20, bottom: 20, left: 20, right: 20 }
+      });
+      lightbox.init();
+
+      // 4. 生成缩略图导航
+      const thumbNav = document.getElementById('thumb-nav');
+      galleryData.forEach((item, idx) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb-item' + (idx === 0 ? ' active' : '');
+        thumb.innerHTML = `<img src="${item.thumb}" alt="${item.title}">`;
+        thumb.addEventListener('click', () => {
+          swiper.slideToLoop(idx);
+        });
+        thumbNav.appendChild(thumb);
+      });
+
+      // 5. 初始显示第一张详情
+      updateDetail(0);
+    }
+
+    // 打开 PhotoSwipe
+    function openLightbox(index) {
+      lightbox.loadAndOpen(index);
+    }
+
+    // 更新详情面板
+    function updateDetail(index) {
+      const item = galleryData[index];
+      if (!item) return;
+
+      document.getElementById('detail-info').innerHTML = `
+        <h2>${item.title} <span style="color:#666;font-size:0.7em;">#${String(item.id).padStart(2,'0')}</span></h2>
+        <div class="subtitle">${item.subtitle}</div>
+        <div class="desc">${item.description}</div>
+        <div class="meta-row">
+          <div class="meta-item">${icons.calendar} ${item.date}</div>
+          <div class="meta-item">${icons.location} ${item.location}</div>
+        </div>
+        <div class="tags">
+          ${item.tags.map(t => `<span class="tag">${icons.tag} ${t}</span>`).join('')}
+        </div>
+      `;
+      document.getElementById('detail-thumb').innerHTML = `<img src="${item.thumb}" alt="${item.title}">`;
+
+      // 更新缩略图高亮
+      document.querySelectorAll('.thumb-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+
+    // 启动
+    loadData();
+  </script>
+</body>
+</html>
